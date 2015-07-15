@@ -41,6 +41,18 @@ public class Nfc extends CordovaPlugin {
     }
 
     @Override
+    protected void onPause() {
+        libInstance.stopForeGroundDispatch();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        libInstance.startForeGroundDispatch();
+        super.onResume();
+    }
+
+    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
@@ -109,10 +121,12 @@ public class Nfc extends CordovaPlugin {
         password = "1234";
 
         if (NxpNfcLibLite.getInstance() != null) {
-            System.out.println("Starting startForeGroundDispatch in init");
             libInstance.startForeGroundDispatch();
+            callbackContext.success();
+        }
+        else{
+            callbackContext.error();
         }
 
-        callbackContext.success();
     }
 }
