@@ -18,12 +18,11 @@ public class Nfc extends CordovaPlugin {
     public void pluginInitialize() {
         super.pluginInitialize();
 
-        
         libInstance = NxpNfcLibLite.getInstance();
         // Call registerActivity function before using other functions of the library.
         libInstance.registerActivity(cordova.getActivity());
 
-        //webView.loadUrl("javascript:console.log('Initialize Plugin');");
+        System.out.println("Plugin Initialized.");
     }
 
     @Override
