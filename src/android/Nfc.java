@@ -124,9 +124,5 @@ public class Nfc extends CordovaPlugin {
             libInstance.startForeGroundDispatch();
             callbackContext.success();
         }
-        else{
-            callbackContext.error();
-        }
-
     }
 }
