@@ -14,28 +14,14 @@
     </js-module>
 
     <platform name="android">
-
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="Nfc">
                 <param name="android-package" value="com.dnrps.nfc.Nfc" />
             </feature>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/*/application/activity">
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <action android:name="android.nfc.action.TAG_DISCOVERED" />
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data android:name="android.nfc.action.TECH_DISCOVERED" android:resource="@xml/nfc_tech_filter" />
-        </config-file>
-
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.NFC" />
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.INTERNET" />
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-feature android:name="android.hardware.nfc" android:required="true" />
         </config-file>
 
