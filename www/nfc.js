@@ -10,4 +10,4 @@ var nfc = {
     }
 }
 
-module.exports = calendar;
+module.exports = nfc;
