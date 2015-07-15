@@ -41,15 +41,24 @@ public class Nfc extends CordovaPlugin {
     }
 
     @Override
-    protected void onPause() {
-        libInstance.stopForeGroundDispatch();
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("onDestroy");
     }
 
     @Override
-    protected void onResume() {
+    public void onPause(boolean multitasking) {
+        super.onPause(multitasking);
+        // TODO: How do we activate background scans?
+        //libInstance.stopForeGroundDispatch();
+        System.out.println("onPause");
+    }
+
+    @Override
+    public void onResume(boolean multitasking) {
+        super.onResume(multitasking);
         libInstance.startForeGroundDispatch();
-        super.onResume();
+        System.out.println("onResume");
     }
 
     @Override
