@@ -1,10 +1,10 @@
-package com.dnrps.com;
- 
+package com.example.plugin;
+
 import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Nfc extends CordovaPlugin {
+public class Hello extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
