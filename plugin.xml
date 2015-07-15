@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.dnrps.nfc" version="0.0.0">
+
+    <name>NFC Plugin</name>
+    <description>Sample NFC Plugin</description>
+
+    <js-module src="www/nfc.js" name="Nfc">
+        <clobbers target="window.nfc" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Nfc">
+                <param name="android-package" value="com.dnrps.nfc.Nfc" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/Nfc.java" target-dir="src/com/dnrps/nfc" />
+    </platform>
+</plugin>
