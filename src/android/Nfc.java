@@ -1,16 +1,22 @@
 package com.dnrps.nfc;
 
 import android.content.Intent;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 
+import com.nxp.nfclib.exceptions.SmartCardException;
 import com.nxp.nfclib.ntag.NTag213215216;
+import com.nxp.nfclib.utils.NxpLogUtils;
 import com.nxp.nfcliblite.Interface.NxpNfcLibLite;
 import com.nxp.nfcliblite.Interface.Nxpnfcliblitecallback;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.io.IOException;
 
 public class Nfc extends CordovaPlugin {
     private final String ACTION_INIT = "init";
@@ -37,9 +43,6 @@ public class Nfc extends CordovaPlugin {
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        
-        System.out.println("onNewIntent Intent: " + intent.toString());
-        System.out.println("onNewIntent Action: " + intent.getAction());
 
         tagInfo = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
@@ -48,16 +51,38 @@ public class Nfc extends CordovaPlugin {
             return;
         }
 
-        System.out.println("Tag info: " + tagInfo.toString());
-
         Nxpnfcliblitecallback callback = new Nxpnfcliblitecallback() {
             @Override
             public void onNTag213215216CardDetected(NTag213215216 nTag213215216) {
-
+                readTag(nTag213215216);
             }
         };
 
-        libInstance.filterIntent(intent, callback);
+        NxpNfcLibLite.getInstance().filterIntent(intent, callback);
+    }
+
+    protected void readTag(final NTag213215216 tag)
+    {
+        try{
+            tag.connect();
+
+            NdefMessage ndefMessage =  tag.readNDEF();
+
+            System.out.println(new String(ndefMessage.getRecords()[0].getPayload()).substring(3));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SmartCardException e) {
+            e.printStackTrace();
+        } catch (FormatException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                tag.close();
+            } catch (IOException e) {
+                System.out.println("IOException at close(): " + e.getMessage());
+            }
+        }
     }
 
     @Override
