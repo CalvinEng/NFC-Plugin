@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.dnrps.nfc" version="0.0.0">
 
-    <name>Hello</name>
+    <name>NFC</name>
 
     <engines>
         <engine name="cordova" version=">=3.4.0" />
     </engines>
 
-    <asset src="www/hello.js" target="js/hello.js" />
+    <asset src="www/nfc.js" target="js/nfc.js" />
 
-    <js-module src="www/hello.js" name="hello">
-        <clobbers target="hello" />
+    <js-module src="www/nfc.js" name="nfc">
+        <clobbers target="nfc" />
     </js-module>
 
     <platform name="android">
