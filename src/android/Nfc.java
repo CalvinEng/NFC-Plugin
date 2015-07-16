@@ -8,7 +8,6 @@ import android.nfc.Tag;
 
 import com.nxp.nfclib.exceptions.SmartCardException;
 import com.nxp.nfclib.ntag.NTag213215216;
-import com.nxp.nfclib.utils.NxpLogUtils;
 import com.nxp.nfcliblite.Interface.NxpNfcLibLite;
 import com.nxp.nfcliblite.Interface.Nxpnfcliblitecallback;
 
@@ -21,8 +20,7 @@ import java.io.IOException;
 public class Nfc extends CordovaPlugin {
     private final String ACTION_INIT = "init";
 
-    private static String TAG = "NfcPlugin";
-
+    private String myCbkId;
     private String password;
     private Tag tagInfo;
 
@@ -89,7 +87,13 @@ public class Nfc extends CordovaPlugin {
 
             NdefMessage ndefMessage =  tag.readNDEF();
 
-            System.out.println(new String(ndefMessage.getRecords()[0].getPayload()).substring(3));
+            String message = ndefMessage.getRecords()[0].getPayload().substring(3);
+            System.out.println(messsage);
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK, message);
+
+            result.setKeepCallback(true);
+            this.webView.sendPluginResult(result, this.myCbkId);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -118,20 +122,20 @@ public class Nfc extends CordovaPlugin {
             init(callbackContext);
         }
         else {
-
             return false;
-
         }
 
         return true;
     }
 
     private void init(CallbackContext callbackContext){
+        myCbkId =  callbackContext.getCallbackId();
+
         password = "1234";
 
         if (NxpNfcLibLite.getInstance() != null) {
             libInstance.startForeGroundDispatch();
-            callbackContext.success();
+            callbackContext.success("OK");
         }
     }
 }
