@@ -136,7 +136,7 @@ public class Nfc extends CordovaPlugin {
             NdefMessage ndefMessage =  tag.readNDEF();
 
             String message = new String(ndefMessage.getRecords()[0].getPayload()).substring(3);
-            String[] msg = string.split(";");
+            String[] msg = message.split(";");
             
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
