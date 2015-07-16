@@ -130,6 +130,9 @@ public class Nfc extends CordovaPlugin {
 
     protected void readAndUpdateTag(final NTag213215216 tag)
     {
+        byte pack[] = {0, 0};
+        byte pw[] = password.getBytes();
+        
         try{
             tag.connect();
 
