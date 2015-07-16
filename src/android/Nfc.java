@@ -88,8 +88,9 @@ public class Nfc extends CordovaPlugin {
             NdefMessage ndefMessage =  tag.readNDEF();
 
             String message = new String(ndefMessage.getRecords()[0].getPayload()).substring(3);
-            System.out.println(messsage);
-
+            
+            System.out.println(message);
+            
             PluginResult result = new PluginResult(PluginResult.Status.OK, message);
 
             result.setKeepCallback(true);
