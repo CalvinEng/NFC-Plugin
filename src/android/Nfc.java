@@ -19,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Nfc extends CordovaPlugin {
     private final String ACTION_INIT = "init";
@@ -82,11 +85,11 @@ public class Nfc extends CordovaPlugin {
             public void onNTag213215216CardDetected(NTag213215216 nTag213215216) {
 
                 if(currentAction.equals(ACTION_INIT)){
-                    readTag(nTag213215216);
+                    readAndUpdateTag(nTag213215216);
                 }
                 else if(currentAction.equals(ACTION_WRITE)){
                     writeTagWithPassword(nTag213215216);
-                    
+
                     currentAction = ACTION_INIT;
                 }
             }
@@ -107,7 +110,43 @@ public class Nfc extends CordovaPlugin {
             System.out.println(message);
 
             PluginResult result = new PluginResult(PluginResult.Status.OK, message);
+            result.setKeepCallback(true);
+            this.webView.sendPluginResult(result, this.init_Cbk_Id);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SmartCardException e) {
+            e.printStackTrace();
+        } catch (FormatException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                tag.close();
+            } catch (IOException e) {
+                System.out.println("IOException at close(): " + e.getMessage());
+            }
+        }
+    }
+
+    protected void readAndUpdateTag(final NTag213215216 tag)
+    {
+        try{
+            tag.connect();
+
+            NdefMessage ndefMessage =  tag.readNDEF();
+
+            String message = new String(ndefMessage.getRecords()[0].getPayload()).substring(3);
+            String[] msg = string.split(";");
+            
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            String dateTime = dateFormat.format(date);
+            
+            String test = msg[0] + ";" + msg[1] + ";" + "MaxproDefaultAdministrator;" + dateTime + ";";
+
+            System.out.println(test);
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK, test);
             result.setKeepCallback(true);
             this.webView.sendPluginResult(result, this.init_Cbk_Id);
 
@@ -142,10 +181,9 @@ public class Nfc extends CordovaPlugin {
             tag.writeNDEF(ndefMessage);
 
             PluginResult result = new PluginResult(PluginResult.Status.OK, "Message successfully written.");
-
             result.setKeepCallback(true);
             this.webView.sendPluginResult(result, this.write_Cbk_Id);
-            
+
             System.out.println("Message successfully written.");
         } catch (IOException e) {
             // TODO Auto-generated catch block
