@@ -5,6 +5,6 @@ module.exports = {
         cordova.exec(successCallback, errorCallback, "Nfc", "init", []);
     },
     write: function (message, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "Nfc", "init", [message]);
+        cordova.exec(successCallback, errorCallback, "Nfc", "write", [message]);
     }
 };
