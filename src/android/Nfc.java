@@ -137,13 +137,20 @@ public class Nfc extends CordovaPlugin {
 
             String message = new String(ndefMessage.getRecords()[0].getPayload()).substring(3);
             String[] msg = message.split(";");
-            
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             String dateTime = dateFormat.format(date);
-            
-            String test = msg[0] + ";" + msg[1] + ";" + "MaxproDefaultAdministrator;" + dateTime + ";";
 
+            String messageToWrite = msg[0] + ";" + msg[1] + ";" + "MaxproDefaultAdministrator;" + dateTime + ";";
+
+            if (!"".equals(password)) {
+                tag.authenticatePwd(pw, pack);
+            }
+            
+            ndefMessage = new NdefMessage(NdefRecord.createTextRecord("en", messageToWrite));
+            tag.writeNDEF(ndefMessage);
+            
             System.out.println(test);
 
             PluginResult result = new PluginResult(PluginResult.Status.OK, test);
@@ -151,6 +158,7 @@ public class Nfc extends CordovaPlugin {
             this.webView.sendPluginResult(result, this.init_Cbk_Id);
 
         } catch (IOException e) {
+            System.out.println("Password Authentication fail!");
             e.printStackTrace();
         } catch (SmartCardException e) {
             e.printStackTrace();
