@@ -136,10 +136,6 @@ public class Nfc extends CordovaPlugin {
 
         if (NxpNfcLibLite.getInstance() != null) {
             libInstance.startForeGroundDispatch();
-            
-            PluginResult result = new PluginResult(PluginResult.Status.OK, "OK");
-            result.setKeepCallback(true);
-            this.webView.sendPluginResult(result, this.myCbkId);
         }
     }
 }
