@@ -141,7 +141,7 @@ public class Nfc extends CordovaPlugin {
 
             tag.writeNDEF(ndefMessage);
 
-            PluginResult result = new PluginResult(PluginResult.Status.OK, message);
+            PluginResult result = new PluginResult(PluginResult.Status.OK, "Message successfully written.");
 
             result.setKeepCallback(true);
             this.webView.sendPluginResult(result, this.write_Cbk_Id);
