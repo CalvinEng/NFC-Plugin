@@ -231,7 +231,7 @@ public class Nfc extends CordovaPlugin {
         return true;
     }
 
-    private void init(user, CallbackContext callbackContext){
+    private void init(String user, CallbackContext callbackContext){
         init_Cbk_Id =  callbackContext.getCallbackId();
         password = "1234";
         currentUser = user;
