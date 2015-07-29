@@ -215,7 +215,7 @@ public class Nfc extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         if (action.equals(ACTION_INIT)){
-            string user = data.getString(0);
+            String user = data.getString(0);
             currentAction = ACTION_INIT;
             init(user, callbackContext);
         }
