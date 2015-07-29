@@ -32,6 +32,7 @@ public class Nfc extends CordovaPlugin {
     private String currentAction;
     private String messageToWrite;
     private String password;
+    private String currentUser;
     private Tag tagInfo;
 
     /** Create lib lite instance. */
@@ -145,7 +146,7 @@ public class Nfc extends CordovaPlugin {
             Date date = new Date();
             String dateTime = dateFormat.format(date);
 
-            String messageToWrite = msg[0] + ";" + msg[1] + ";" + "MaxproDefaultAdministrator;" + dateTime + ";";
+            String messageToWrite = msg[0] + ";" + msg[1] + ";" + currentUser + ";" + dateTime + ";";
 
             if (!"".equals(password)) {
                 tag.authenticatePwd(pw, pack);
@@ -214,8 +215,9 @@ public class Nfc extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         if (action.equals(ACTION_INIT)){
+            string user = data.getString(0);
             currentAction = ACTION_INIT;
-            init(callbackContext);
+            init(user, callbackContext);
         }
         else if (action.equals(ACTION_WRITE)){
             currentAction = ACTION_WRITE;
@@ -229,9 +231,10 @@ public class Nfc extends CordovaPlugin {
         return true;
     }
 
-    private void init(CallbackContext callbackContext){
+    private void init(user, CallbackContext callbackContext){
         init_Cbk_Id =  callbackContext.getCallbackId();
         password = "1234";
+        currentUser = user;
 
         if (NxpNfcLibLite.getInstance() != null) {
             libInstance.startForeGroundDispatch();
