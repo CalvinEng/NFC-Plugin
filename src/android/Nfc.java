@@ -235,6 +235,7 @@ public class Nfc extends CordovaPlugin {
         init_Cbk_Id =  callbackContext.getCallbackId();
         password = "1234";
         currentUser = user;
+        System.out.println(user);
 
         if (NxpNfcLibLite.getInstance() != null) {
             libInstance.startForeGroundDispatch();
