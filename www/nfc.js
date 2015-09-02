@@ -2,7 +2,7 @@
 
 module.exports = {
     init: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "Nfc", "init");
+        cordova.exec(successCallback, errorCallback, "Nfc", "init", []);
     },
     write: function (message, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "Nfc", "write", [message]);
