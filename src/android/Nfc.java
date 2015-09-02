@@ -86,7 +86,7 @@ public class Nfc extends CordovaPlugin {
             public void onNTag213215216CardDetected(NTag213215216 nTag213215216) {
 
                 if(currentAction.equals(ACTION_INIT)){
-                    readAndUpdateTag(nTag213215216);
+                    readTag(nTag213215216);
                 }
                 else if(currentAction.equals(ACTION_WRITE)){
                     writeTagWithPassword(nTag213215216);
@@ -215,9 +215,8 @@ public class Nfc extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         if (action.equals(ACTION_INIT)){
-            String user = data.getString(0);
             currentAction = ACTION_INIT;
-            init(user, callbackContext);
+            init(callbackContext);
         }
         else if (action.equals(ACTION_WRITE)){
             currentAction = ACTION_WRITE;
@@ -231,11 +230,8 @@ public class Nfc extends CordovaPlugin {
         return true;
     }
 
-    private void init(String user, CallbackContext callbackContext){
+    private void init(CallbackContext callbackContext){
         init_Cbk_Id =  callbackContext.getCallbackId();
-        password = "1234";
-        currentUser = user;
-        System.out.println(user);
 
         if (NxpNfcLibLite.getInstance() != null) {
             libInstance.startForeGroundDispatch();
