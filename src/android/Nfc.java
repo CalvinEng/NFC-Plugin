@@ -138,50 +138,58 @@ public class Nfc extends CordovaPlugin {
 
     protected void readAndUpdateTag(final NTag213215216 tag)
     {
-        byte pack[] = {0, 0};
-        byte pw[] = password.getBytes();
-        
-        try{
-            tag.connect();
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                byte pack[] = {0, 0};
+                byte pw[] = password.getBytes();
 
-            NdefMessage ndefMessage =  tag.readNDEF();
+                try{
+                    tag.connect();
 
-            String message = new String(ndefMessage.getRecords()[0].getPayload()).substring(3);
-            String[] msg = message.split(";");
+                    NdefMessage ndefMessage =  tag.readNDEF();
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
-            String dateTime = dateFormat.format(date);
+                    String message = new String(ndefMessage.getRecords()[0].getPayload()).substring(3);
+                    String[] msg = message.split(";");
 
-            String messageToWrite = msg[0] + ";" + msg[1] + ";" + currentUser + ";" + dateTime + ";";
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    String dateTime = dateFormat.format(date);
+                    
+                    JSONObject resultJson = request("http://192.168.1.203/MaxPro_WebService/api/asset/" + msg[0]);
+                    String description = resultJson.getString("Description");
 
-            if (!"".equals(password)) {
-                tag.authenticatePwd(pw, pack);
+                    String messageToWrite = msg[0] + ";" + description + ";" + currentUser + ";" + dateTime + ";";
+
+                    if (!"".equals(password)) {
+                        tag.authenticatePwd(pw, pack);
+                    }
+
+                    ndefMessage = new NdefMessage(NdefRecord.createTextRecord("en", messageToWrite));
+                    tag.writeNDEF(ndefMessage);
+
+                    System.out.println(messageToWrite);
+
+                    PluginResult result = new PluginResult(PluginResult.Status.OK, messageToWrite);
+                    result.setKeepCallback(true);
+                    this.webView.sendPluginResult(result, this.init_Cbk_Id);
+
+                } catch (IOException e) {
+                    System.out.println("Password Authentication fail!");
+                    e.printStackTrace();
+                } catch (SmartCardException e) {
+                    e.printStackTrace();
+                } catch (FormatException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        tag.close();
+                    } catch (IOException e) {
+                        System.out.println("IOException at close(): " + e.getMessage());
+                    }
+                }
             }
-            
-            ndefMessage = new NdefMessage(NdefRecord.createTextRecord("en", messageToWrite));
-            tag.writeNDEF(ndefMessage);
-            
-            System.out.println(messageToWrite);
-
-            PluginResult result = new PluginResult(PluginResult.Status.OK, messageToWrite);
-            result.setKeepCallback(true);
-            this.webView.sendPluginResult(result, this.init_Cbk_Id);
-
-        } catch (IOException e) {
-            System.out.println("Password Authentication fail!");
-            e.printStackTrace();
-        } catch (SmartCardException e) {
-            e.printStackTrace();
-        } catch (FormatException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                tag.close();
-            } catch (IOException e) {
-                System.out.println("IOException at close(): " + e.getMessage());
-            }
-        }
+        });
     }
 
     protected void writeTagWithPassword(final NTag213215216 tag){
@@ -254,5 +262,36 @@ public class Nfc extends CordovaPlugin {
         password = "1234";
 
         messageToWrite = message;
+    }
+    
+    private JSONObject request(String urlString) {
+        // TODO Auto-generated method stub
+
+        try{
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestProperty("User-Agent", "");
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+
+            BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder responseStrBuilder = new StringBuilder();
+
+            String inputStr;
+            while ((inputStr = rd.readLine()) != null)
+                responseStrBuilder.append(inputStr);
+            return new JSONArray(responseStrBuilder.toString()).getJSONObject(0);
+
+        } catch (IOException e) {
+            // writing exception to log
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
