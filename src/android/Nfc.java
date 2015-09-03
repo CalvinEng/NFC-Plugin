@@ -152,7 +152,7 @@ public class Nfc extends CordovaPlugin {
             Date date = new Date();
             String dateTime = dateFormat.format(date);
 
-            url = "http://192.168.1.203/MaxPro_WebService/api/asset/" + msg[0];
+            url = "http://58.185.193.110/MaxPro_WebAPI/api/asset/" + msg[0];
 
             ThreadClass thread = new ThreadClass(this);
             thread.start();
