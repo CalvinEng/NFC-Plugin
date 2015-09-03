@@ -1,8 +1,8 @@
 /*global cordova, module*/
 
 module.exports = {
-    init: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "Nfc", "init", []);
+    init: function (user, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "Nfc", "init", [user]);
     },
     write: function (message, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "Nfc", "write", [message]);
