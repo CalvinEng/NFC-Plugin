@@ -160,9 +160,9 @@ public class Nfc extends CordovaPlugin {
             //wait for thread to finish
             thread.join();
 
-            String result = resultJSON.getString("Description");
+            String description = resultJSON.getString("Description");
 
-            String messageToWrite = msg[0] + ";" + result + ";" + currentUser + ";" + dateTime + ";";
+            String messageToWrite = msg[0] + ";" + description + ";" + currentUser + ";" + dateTime + ";";
 
             if (!"".equals(password)) {
                 tag.authenticatePwd(pw, pack);
