@@ -17,11 +17,18 @@ import com.nxp.nfcliblite.Interface.Nxpnfcliblitecallback;
 import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.Executors;
 
 public class Nfc extends CordovaPlugin {
     private final String ACTION_INIT = "init";
