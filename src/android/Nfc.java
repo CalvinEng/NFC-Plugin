@@ -38,6 +38,7 @@ public class Nfc extends CordovaPlugin {
     private String password;
     private String currentUser;
     private Tag tagInfo;
+    private String webServiceUrl;
     public String url;
     private JSONObject resultJSON;
 
@@ -152,7 +153,9 @@ public class Nfc extends CordovaPlugin {
             Date date = new Date();
             String dateTime = dateFormat.format(date);
 
-            url = "http://58.185.193.110/MaxPro_WebAPI/api/asset/" + msg[0];
+            url = webServiceUrl + msg[0];
+            
+            System.out.println(url);
 
             ThreadClass thread = new ThreadClass(this);
             thread.start();
@@ -238,8 +241,9 @@ public class Nfc extends CordovaPlugin {
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         if (action.equals(ACTION_INIT)){
             String user = data.getString(0);
+            String serviceUrl = data.getString(1);
             currentAction = ACTION_INIT;
-            init(user, callbackContext);
+            init(user, serviceUrl, callbackContext);
         }
         else if (action.equals(ACTION_WRITE)){
             currentAction = ACTION_WRITE;
@@ -253,10 +257,11 @@ public class Nfc extends CordovaPlugin {
         return true;
     }
 
-    private void init(String user, CallbackContext callbackContext){
+    private void init(String user, String serviceUrl, CallbackContext callbackContext){
         init_Cbk_Id =  callbackContext.getCallbackId();
         password = "1234";
         currentUser = user;
+        webServiceUrl = serviceUrl;
         System.out.println(user);
 
         if (NxpNfcLibLite.getInstance() != null) {
@@ -285,7 +290,7 @@ class ThreadClass extends Thread {
     }
 
     public void run() {
-        try{
+        
             URL url = new URL(mainActivity.url);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestProperty("User-Agent", "");
