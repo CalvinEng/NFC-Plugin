@@ -290,7 +290,8 @@ class ThreadClass extends Thread {
     }
 
     public void run() {
-        
+        try
+        {
             URL url = new URL(mainActivity.url);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestProperty("User-Agent", "");
