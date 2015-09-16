@@ -153,8 +153,7 @@ public class Nfc extends CordovaPlugin {
             Date date = new Date();
             String dateTime = dateFormat.format(date);
 
-            url = webServiceUrl + msg[0];
-            url.replace(" ", "%20");
+            url = webServiceUrl + msg[0].replace(" ", "%20");
             
             System.out.println(url);
 
