@@ -4,7 +4,7 @@ Nfc.prototype.init = function (user, url, successCallback, errorCallback) {
 	cordova.exec(successCallback, errorCallback, "Nfc", "init", [user, url]);
 };
 
-Nfc.prototype.write: function (message, successCallback, errorCallback) {
+Nfc.prototype.write = function (message, successCallback, errorCallback) {
 	cordova.exec(successCallback, errorCallback, "Nfc", "write", [message]);
 };
 
